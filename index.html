@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Anatomy of Salah</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#060606;--surface:#0d0d0d;--card:#111;
+  --gold:#c9a84c;--gold-dim:#8d6e1f;--gold-glow:#d4af3740;
+  --text:#d4d0c8;--text-dim:#888;--text-faint:#555;
+  --green:#1b5e20;--green-light:#4caf50;
+}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:'Cormorant Garamond','Georgia',serif;
+  line-height:1.7;overflow-x:hidden;
+  min-height:100vh;
+}
+/* Grain overlay */
+body::after{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
+  opacity:0.03;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ─── HERO ─── */
+.hero{
+  min-height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;padding:40px 24px;
+  position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;
+  width:500px;height:500px;border-radius:50%;
+  background:radial-gradient(circle,var(--gold-glow),transparent 70%);
+  top:50%;left:50%;transform:translate(-50%,-50%);
+  animation:pulse-glow 6s ease-in-out infinite;
+}
+@keyframes pulse-glow{0%,100%{opacity:0.3;transform:translate(-50%,-50%) scale(1)}50%{opacity:0.5;transform:translate(-50%,-50%) scale(1.1)}}
+
+.hero-bismillah{
+  font-family:'Amiri',serif;font-size:clamp(20px,4vw,32px);
+  color:var(--gold);opacity:0.5;margin-bottom:16px;
+  position:relative;z-index:1;
+  animation:fadeUp 1s ease both;
+}
+.hero-title{
+  font-size:clamp(36px,7vw,72px);font-weight:300;
+  color:#fff;letter-spacing:6px;text-transform:uppercase;
+  position:relative;z-index:1;
+  animation:fadeUp 1s ease 0.2s both;
+}
+.hero-sub{
+  font-size:clamp(14px,2.5vw,18px);color:var(--text-dim);
+  margin-top:12px;font-style:italic;font-weight:300;
+  max-width:500px;position:relative;z-index:1;
+  animation:fadeUp 1s ease 0.4s both;
+}
+.hero-line{
+  width:80px;height:1px;background:var(--gold);
+  margin:32px auto;opacity:0.4;position:relative;z-index:1;
+  animation:fadeUp 1s ease 0.6s both;
+}
+.hero-scroll{
+  font-size:12px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--text-faint);position:relative;z-index:1;
+  animation:fadeUp 1s ease 0.8s both;
+}
+.hero-scroll span{
+  display:block;margin-top:8px;
+  animation:bob 2s ease-in-out infinite;
+}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* ─── STAGE SECTIONS ─── */
+.stage{
+  min-height:100vh;padding:80px 24px;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+}
+.stage:nth-child(even){background:var(--surface)}
+
+.stage-inner{
+  max-width:900px;width:100%;
+  display:grid;grid-template-columns:1fr 1fr;gap:48px;
+  align-items:center;
+}
+@media(max-width:768px){
+  .stage-inner{grid-template-columns:1fr;gap:32px}
+  .stage{padding:60px 20px;min-height:auto}
+}
+
+/* Visual side */
+.stage-visual{
+  display:flex;flex-direction:column;align-items:center;
+  gap:16px;
+}
+.posture-circle{
+  width:220px;height:220px;border-radius:50%;
+  position:relative;
+  display:flex;align-items:center;justify-content:center;
+}
+.posture-circle::before{
+  content:'';position:absolute;inset:-8px;border-radius:50%;
+  border:1px solid var(--gold);opacity:0.1;
+}
+.posture-circle::after{
+  content:'';position:absolute;inset:-20px;border-radius:50%;
+  border:1px solid var(--gold);opacity:0.05;
+}
+.posture-circle svg{width:140px;height:140px}
+.movement-label{
+  font-size:12px;color:var(--text-faint);
+  font-style:italic;text-align:center;
+  max-width:200px;font-family:'Cormorant Garamond',serif;
+}
+
+/* Content side */
+.stage-num{
+  font-size:11px;font-weight:600;letter-spacing:3px;
+  margin-bottom:4px;
+}
+.stage-title{
+  font-size:clamp(28px,4vw,40px);font-weight:300;
+  color:#fff;margin-bottom:4px;line-height:1.2;
+}
+.stage-subtitle{
+  font-size:16px;font-style:italic;
+  margin-bottom:24px;opacity:0.6;
+}
+
+/* Arabic block */
+.arabic-block{
+  border-radius:16px;padding:24px;margin-bottom:24px;
+  border:1px solid rgba(255,255,255,0.06);
+  position:relative;overflow:hidden;
+}
+.arabic-block::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(201,168,76,0.05),transparent);
+  pointer-events:none;
+}
+.arabic-text{
+  font-family:'Amiri',serif;font-size:clamp(18px,3vw,24px);
+  line-height:2;text-align:right;direction:rtl;
+  color:#fff;margin-bottom:16px;white-space:pre-line;
+  position:relative;z-index:1;
+}
+.arabic-divider{
+  height:1px;margin:0 0 16px;opacity:0.1;
+}
+.translit{
+  font-size:14px;color:var(--gold);font-style:italic;
+  line-height:1.8;margin-bottom:12px;white-space:pre-line;
+  position:relative;z-index:1;
+}
+.translation{
+  font-size:15px;color:var(--text);line-height:1.8;
+  white-space:pre-line;font-weight:300;
+  position:relative;z-index:1;
+}
+
+/* Meaning & Reflection */
+.section-label{
+  font-size:10px;font-weight:600;letter-spacing:2.5px;
+  text-transform:uppercase;margin-bottom:8px;
+}
+.meaning{
+  font-size:17px;line-height:1.85;color:var(--text);
+  font-weight:300;margin-bottom:28px;
+}
+.reflection-block{
+  border-left:3px solid;padding-left:20px;
+}
+.reflection{
+  font-size:17px;line-height:1.85;font-style:italic;
+  font-weight:300;
+}
+
+/* ─── CLOSING ─── */
+.closing{
+  padding:100px 24px;text-align:center;
+  position:relative;
+}
+.closing::before{
+  content:'';position:absolute;
+  width:400px;height:400px;border-radius:50%;
+  background:radial-gradient(circle,var(--gold-glow),transparent 70%);
+  top:50%;left:50%;transform:translate(-50%,-50%);opacity:0.2;
+}
+.closing-title{
+  font-size:clamp(28px,5vw,42px);font-weight:300;
+  color:var(--gold);margin-bottom:8px;position:relative;z-index:1;
+}
+.closing-line{
+  width:60px;height:1px;background:var(--gold);
+  margin:16px auto 40px;opacity:0.3;
+}
+.closing-body{
+  max-width:680px;margin:0 auto;text-align:left;
+  position:relative;z-index:1;
+}
+.closing-body p{
+  font-size:17px;line-height:1.9;color:#bbb;
+  font-weight:300;margin-bottom:24px;
+}
+.closing-dua{
+  text-align:center;margin-top:48px;position:relative;z-index:1;
+}
+.closing-dua p{
+  font-size:17px;color:var(--gold);font-style:italic;
+  opacity:0.7;line-height:1.8;
+}
+.closing-dua .ameen{
+  font-family:'Amiri',serif;font-size:32px;
+  color:var(--gold);opacity:0.4;margin-top:16px;
+}
+
+/* ─── SCROLL ANIMATIONS ─── */
+.reveal{opacity:0;transform:translateY(30px);transition:all 0.8s cubic-bezier(0.22,1,0.36,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-delay-1{transition-delay:0.1s}
+.reveal-delay-2{transition-delay:0.2s}
+.reveal-delay-3{transition-delay:0.3s}
+.reveal-delay-4{transition-delay:0.4s}
+.reveal-delay-5{transition-delay:0.5s}
+
+/* ─── NAV DOTS ─── */
+.nav-dots{
+  position:fixed;right:16px;top:50%;transform:translateY(-50%);
+  z-index:100;display:flex;flex-direction:column;gap:8px;
+}
+.nav-dot{
+  width:8px;height:8px;border-radius:50%;
+  border:1px solid var(--text-faint);background:transparent;
+  cursor:pointer;transition:all 0.3s ease;padding:0;
+}
+.nav-dot.active{background:var(--gold);border-color:var(--gold);transform:scale(1.3)}
+.nav-dot:hover{border-color:var(--gold)}
+@media(max-width:768px){.nav-dots{right:8px;gap:6px}.nav-dot{width:6px;height:6px}}
+</style>
+</head>
+<body>
+
+<!-- NAV DOTS -->
+<nav class="nav-dots" id="navDots"></nav>
+
+<!-- HERO -->
+<section class="hero" id="section-hero">
+  <div class="hero-bismillah">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
+  <h1 class="hero-title">The Anatomy<br>of Salah</h1>
+  <p class="hero-sub">A visual journey through the Muslim prayer — understanding what you say, why you say it, and how it draws you closer to Allah</p>
+  <div class="hero-line"></div>
+  <div class="hero-scroll">Scroll to begin<span>↓</span></div>
+</section>
+
+<!-- STAGES (generated by JS) -->
+<main id="stages"></main>
+
+<!-- CLOSING -->
+<section class="closing" id="section-closing">
+  <h2 class="closing-title reveal">The Spiritual Flow of Salah</h2>
+  <div class="closing-line reveal reveal-delay-1"></div>
+  <div class="closing-body">
+    <p class="reveal reveal-delay-1">Salah is not a collection of random movements — it is a carefully designed journey that takes you from the noise of the world into the stillness of Divine presence, and returns you with renewed purpose.</p>
+    <p class="reveal reveal-delay-2">It begins with intention — a conscious decision to leave everything behind. You stand upright, declare Allah's greatness, and open with words of praise. In qiyām, you recite His words — the Qur'ān — receiving guidance directly. This is the station of listening.</p>
+    <p class="reveal reveal-delay-2">From standing, you bow in rukū', lowering yourself in recognition of His majesty. You rise briefly in gratitude, then descend to sujūd — the lowest point a human body can reach. Paradoxically, it is here that you are closest to Allah. This is the station of nearness.</p>
+    <p class="reveal reveal-delay-3">Between the two prostrations, you ask for forgiveness — because being close to perfection reveals your own imperfection. You return to prostration, deepening your surrender. This cycle repeats, building closeness and humility layer upon layer.</p>
+    <p class="reveal reveal-delay-3">In the final sitting, you testify to Allah's oneness and the prophethood of Muhammad ﷺ, linking your private worship to the universal message of Islam. You send blessings upon the Prophet, connecting yourself to a chain of mercy stretching from Ibrāhīm عليه السلام forward to every believer who will ever live.</p>
+    <p class="reveal reveal-delay-4">Then you end with peace — salām. You re-enter the world lighter, cleaner, and more aligned. The prayer has taken you on a complete arc: from the world, to Allah, and back again.</p>
+    <p class="reveal reveal-delay-5"><strong style="color:#fff">This is why Muslims pray five times a day.</strong> Not because Allah needs it, but because we do. Each salah is a reset, a return, a remembrance. And every time you stand on that mat, you are given yet another chance to come home.</p>
+  </div>
+  <div class="closing-dua reveal reveal-delay-5">
+    <div style="width:60px;height:1px;background:var(--gold);margin:0 auto 24px;opacity:0.3"></div>
+    <p>May Allah accept your prayers, illuminate your heart,<br>and make every salah a source of peace and closeness to Him.</p>
+    <div class="ameen">آمين</div>
+  </div>
+</section>
+
+<script>
+const stages = [
+  {
+    num:"01", name:"Niyyah", subtitle:"The Intention",
+    color:"#2E7D32", accent:"#81C784",
+    arabic:null, translit:null, translation:null,
+    meaning:"The Niyyah is not spoken aloud. It is a deliberate, conscious decision in the heart that you are about to stand before the Creator of the heavens and the earth. You clarify which prayer you are performing, how many units you intend to pray, and that you do so sincerely for Allah alone. Without intention, the prayer is just motions. With it, every motion becomes a conversation with God.",
+    reflection:"Before you raise your hands, pause. Let the noise of the day settle. Acknowledge where you are about to go — not just to a prayer mat, but into the presence of the One who formed you. This moment of inner silence is your first step out of the world and into worship.",
+    movement:"Standing still, hands at sides, eyes gently closed",
+    posture:"standing-still"
+  },
+  {
+    num:"02", name:"Takbīrat al-Iḥrām", subtitle:"The Opening Takbir",
+    color:"#1565C0", accent:"#64B5F6",
+    arabic:"اللهُ أَكْبَر", translit:"Allāhu Akbar", translation:"Allah is the Greatest.",
+    meaning:"By raising your hands to your ears and declaring 'Allāhu Akbar,' you make a profound statement: nothing in your life — no worry, no desire, no distraction — is greater than Allah. This phrase acts as a spiritual threshold. The moment you say it, you enter a sacred state in which the world behind you becomes secondary. The raising of the hands symbolises casting the world behind you.",
+    reflection:"Imagine a doorway. Behind you is every task, every anxiety, every notification. As your hands rise and the words leave your lips, you step through that doorway into a private audience with the King of all kings. Nothing else matters now. You have arrived.",
+    movement:"Hands raised to the ears, then folded",
+    posture:"hands-raised"
+  },
+  {
+    num:"03", name:"Du'ā al-Istiftāḥ", subtitle:"The Opening Supplication",
+    color:"#6A1B9A", accent:"#BA68C8",
+    arabic:"سُبْحَانَكَ اللَّهُمَّ وَبِحَمْدِكَ، وَتَبَارَكَ اسْمُكَ، وَتَعَالَى جَدُّكَ، وَلَا إِلَهَ غَيْرُكَ",
+    translit:"Subḥānaka Allāhumma wa biḥamdika, wa tabāraka ismuka, wa ta'ālā jadduka, wa lā ilāha ghayruk.",
+    translation:"Glory be to You, O Allah, and praise be to You. Blessed is Your name, exalted is Your majesty, and there is no god but You.",
+    meaning:"This supplication is your greeting to Allah as you begin. You open by glorifying Him, acknowledging that He is beyond any flaw. You praise His name as a source of blessing, and you affirm His unmatched greatness. Finally, you declare that no one and nothing else deserves worship.",
+    reflection:"You have just entered the presence of the Divine. Before you recite His Book, you first honour Him with your own words of awe. Feel the weight of what you are saying: the name of Allah is blessed, His majesty is beyond comprehension, and you are standing before the only One truly worthy of this moment.",
+    movement:"Standing, hands folded over the chest",
+    posture:"standing-folded"
+  },
+  {
+    num:"04", name:"Sūrah Al-Fātiḥa", subtitle:"The Opening Chapter",
+    color:"#BF360C", accent:"#FF8A65",
+    arabic:"بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ\nالْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ\nالرَّحْمَنِ الرَّحِيمِ\nمَالِكِ يَوْمِ الدِّينِ\nإِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ\nاهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ\nصِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ\nغَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ",
+    translit:"Bismi-llāhi r-Raḥmāni r-Raḥīm\nAl-ḥamdu li-llāhi Rabbi l-'ālamīn\nAr-Raḥmāni r-Raḥīm\nMāliki yawmi d-dīn\nIyyāka na'budu wa iyyāka nasta'īn\nIhdinā ṣ-ṣirāṭa l-mustaqīm\nṢirāṭa lladhīna an'amta 'alayhim\nghayri l-maghḍūbi 'alayhim wa lā ḍ-ḍāllīn",
+    translation:"In the name of Allah, the Most Gracious, the Most Merciful\nAll praise is for Allah, the Lord of all the worlds\nThe Most Gracious, the Most Merciful\nMaster of the Day of Judgement\nYou alone we worship, and You alone we ask for help\nGuide us along the straight path\nThe path of those You have blessed\nnot those who earned Your anger, nor those who went astray",
+    meaning:"Al-Fātiḥa is the single most important passage in the prayer. Allah divided this sūrah into two halves — one for Himself and one for His servant. The first three verses are pure praise. Then comes the pivotal verse — 'You alone we worship and You alone we ask for help' — where you declare total dependence on Him. The final verses are your deepest request: guide me, keep me on the right path, protect me from going astray.",
+    reflection:"This is not a monologue — it is a dialogue. A hadith qudsī tells us that when you say 'All praise is for Allah,' He responds: 'My servant has praised Me.' When you say 'Guide us,' He says: 'This is for My servant, and My servant shall have what he asks for.' Speak each word knowing He is listening and answering you in real time.",
+    movement:"Standing, hands folded, reciting",
+    posture:"standing-folded"
+  },
+  {
+    num:"05", name:"Additional Qur'ān", subtitle:"Further Recitation",
+    color:"#00695C", accent:"#4DB6AC",
+    arabic:"قُلْ هُوَ اللَّهُ أَحَدٌ\nاللَّهُ الصَّمَدُ\nلَمْ يَلِدْ وَلَمْ يُولَدْ\nوَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ",
+    translit:"Qul Huwa Allāhu Aḥad\nAllāhu ṣ-Ṣamad\nLam yalid wa lam yūlad\nWa lam yakun lahu kufuwan aḥad",
+    translation:"Say: He is Allah, the One\nAllah, the Eternal Refuge\nHe neither begets nor is born\nAnd there is none comparable to Him",
+    meaning:"After Al-Fātiḥa, you recite any additional portion of the Qur'ān in the first two units. Sūrah Al-Ikhlāṣ — shown here — is equivalent to one third of the Qur'ān. It is a pure declaration of monotheism: Allah is uniquely One, everything depends on Him, He is uncreated and unmatched.",
+    reflection:"You are now speaking Allah's words back to Him. The Qur'ān descended from above the heavens, and here you are, a servant on earth, returning those words to their Source. Let each verse pass through your heart before it passes through your lips.",
+    movement:"Standing, hands folded, reciting",
+    posture:"standing-folded"
+  },
+  {
+    num:"06", name:"Rukū'", subtitle:"The Bowing",
+    color:"#E65100", accent:"#FFB74D",
+    arabic:"سُبْحَانَ رَبِّيَ الْعَظِيمِ",
+    translit:"Subḥāna Rabbiyal-'Aẓīm (×3)",
+    translation:"Glory be to my Lord, the Most Great.",
+    meaning:"You bow deeply — back parallel to the ground, hands grasping your knees, gaze on the place of prostration. You declare Allah's greatness and acknowledge He is far above any imperfection. The physical lowering of your body reflects the lowering of your ego. You were just standing tall reciting; now you bend in submission.",
+    reflection:"The spine that carries you through the day with ambition and self-assurance now bends willingly. Feel the surrender in your muscles. You are not diminished by this act — you are elevated. There is a dignity in choosing to bow before the only One who deserves it.",
+    movement:"Bowing at the waist, back flat, hands on knees",
+    posture:"bowing"
+  },
+  {
+    num:"07", name:"I'tidāl", subtitle:"Rising After Rukū'",
+    color:"#283593", accent:"#7986CB",
+    arabic:"سَمِعَ اللَّهُ لِمَنْ حَمِدَهُ\nرَبَّنَا وَلَكَ الْحَمْدُ",
+    translit:"Sami'Allāhu liman ḥamidah\nRabbanā wa lakal-ḥamd",
+    translation:"Allah hears the one who praises Him.\nOur Lord, to You belongs all praise.",
+    meaning:"You rise from bowing and stand upright. The first phrase declares that Allah hears every word of gratitude. The response — 'Our Lord, to You belongs all praise' — is your personal affirmation. This brief standing centres you between two acts of humility: bowing and prostration.",
+    reflection:"You are heard. That is the promise. Every whisper of gratitude you have ever uttered, every silent 'thank You' in a difficult moment — He heard all of it. Stand tall in that assurance for just a moment before you descend to the ground.",
+    movement:"Standing upright, arms resting at sides",
+    posture:"standing-still"
+  },
+  {
+    num:"08", name:"Sujūd", subtitle:"The Prostration",
+    color:"#880E4F", accent:"#F06292",
+    arabic:"سُبْحَانَ رَبِّيَ الأَعْلَى",
+    translit:"Subḥāna Rabbiyal-A'lā (×3)",
+    translation:"Glory be to my Lord, the Most High.",
+    meaning:"The pinnacle of prayer. Seven parts of your body touch the earth: forehead and nose, both palms, both knees, toes of both feet. The Prophet ﷺ said the servant is closest to Allah in this position. You declare He is 'the Most High' while you are at your physical lowest — and it is precisely here that you reach the highest spiritual station.",
+    reflection:"Your forehead meets the earth. The same earth you were created from, the same earth you will return to. Here there is no rank, no wealth, no status. Only you and Allah. This is where du'ā is most powerfully answered. Pour your heart out. He is closer to you now than at any other moment in your day.",
+    movement:"Forehead, nose, palms, knees and toes all touching the ground",
+    posture:"prostrating"
+  },
+  {
+    num:"09", name:"Jalsah", subtitle:"Sitting Between Prostrations",
+    color:"#33691E", accent:"#AED581",
+    arabic:"رَبِّ اغْفِرْ لِي، رَبِّ اغْفِرْ لِي",
+    translit:"Rabbighfir lī, Rabbighfir lī",
+    translation:"My Lord, forgive me. My Lord, forgive me.",
+    meaning:"Between the two prostrations, you sit upright on your left foot and ask Allah for forgiveness. The repetition is deliberate and urgent — a recognition that human beings are in constant need of mercy. This brief sitting is not a pause; it is an active plea.",
+    reflection:"There is courage in asking to be forgiven. It means you see yourself clearly — your mistakes, your forgetfulness, your moments of ingratitude — and you bring all of it to the One who can wash it away. This simple repetition carries the weight of complete honesty before your Creator.",
+    movement:"Sitting upright on the left foot, hands resting on thighs",
+    posture:"sitting"
+  },
+  {
+    num:"10", name:"Tashahhud", subtitle:"The Testimony of Faith",
+    color:"#4E342E", accent:"#A1887F",
+    arabic:"التَّحِيَّاتُ لِلَّهِ وَالصَّلَوَاتُ وَالطَّيِّبَاتُ\nالسَّلَامُ عَلَيْكَ أَيُّهَا النَّبِيُّ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ\nالسَّلَامُ عَلَيْنَا وَعَلَى عِبَادِ اللَّهِ الصَّالِحِينَ\nأَشْهَدُ أَن لَّا إِلَهَ إِلَّا اللَّهُ\nوَأَشْهَدُ أَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ",
+    translit:"At-taḥiyyātu li-llāhi wa ṣ-ṣalawātu wa ṭ-ṭayyibāt.\nAs-salāmu 'alayka ayyuhan-Nabiyyu wa raḥmatullāhi wa barakātuh.\nAs-salāmu 'alaynā wa 'alā 'ibādillāhi ṣ-ṣāliḥīn.\nAshhadu an lā ilāha illallāh,\nwa ashhadu anna Muḥammadan 'abduhu wa rasūluh.",
+    translation:"All greetings, prayers, and pure words are for Allah.\nPeace be upon you, O Prophet, and the mercy of Allah and His blessings.\nPeace be upon us and upon the righteous servants of Allah.\nI bear witness there is no god but Allah,\nand Muhammad is His servant and messenger.",
+    meaning:"The Tashahhud echoes the greeting the Prophet ﷺ offered to Allah during the night journey — Al-Isrā' wal-Mi'rāj — when he ascended beyond the heavens. By reciting it, you join a chain of devotion stretching back to that miraculous night. You send peace upon the Prophet, upon yourself, and upon every righteous servant across time. Then you renew the shahāda — the most important declaration a human can make.",
+    reflection:"Sitting here, you are connected to something vast. The same words were spoken above the seven heavens. And now they are on your lips in your room, on your prayer mat. The shahāda you utter is not a formality — it is the axis around which your entire life turns. Renew it with conviction.",
+    movement:"Sitting, right index finger raised during the shahāda",
+    posture:"sitting-finger"
+  },
+  {
+    num:"11", name:"Ṣalawāt", subtitle:"Blessings Upon the Prophet ﷺ",
+    color:"#0D47A1", accent:"#5C6BC0",
+    arabic:"اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ\nكَمَا صَلَّيْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ\nإِنَّكَ حَمِيدٌ مَجِيدٌ",
+    translit:"Allāhumma ṣalli 'alā Muḥammadin wa 'alā āli Muḥammad,\nkamā ṣallayta 'alā Ibrāhīma wa 'alā āli Ibrāhīm,\ninnaka Ḥamīdun Majīd.",
+    translation:"O Allah, send Your grace upon Muhammad and his family,\nas You sent Your grace upon Ibrāhīm and his family.\nYou are indeed Praiseworthy, Most Glorious.",
+    meaning:"Before you exit the prayer, you honour the Prophet ﷺ by asking Allah to elevate him and his family, just as He elevated Ibrāhīm عليه السلام and his family. This connects you to the unbroken chain of prophets and reminds you that the prayer you perform is a gift carried by these messengers. Whoever sends one blessing upon the Prophet, Allah sends ten back.",
+    reflection:"Think of the man who stood in the night praying until his feet swelled, who wept for the well-being of people he had never met, who carried this message so it could reach you across fourteen centuries. The least you can offer him is this prayer of honour. And in doing so, you receive more than you give.",
+    movement:"Sitting, hands resting on thighs",
+    posture:"sitting"
+  },
+  {
+    num:"12", name:"Taslīm", subtitle:"The Closing Salutation",
+    color:"#1B5E20", accent:"#81C784",
+    arabic:"السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ",
+    translit:"As-salāmu 'alaykum wa raḥmatullāh\n(turning head to the right, then repeated turning to the left)",
+    translation:"Peace and the mercy of Allah be upon you.",
+    meaning:"The prayer ends as it began — with an acknowledgement of Allah. By turning your head right then left and offering peace, you greet the angels on each shoulder and every fellow worshipper around you. 'Salām' is also one of Allah's names — you are spreading something divine into the world as you re-enter it. The prayer is complete. You return to your day changed, cleansed, and reconnected.",
+    reflection:"As you turn your head and say these words, you are not just ending a ritual. You are sending peace out into the world from a place where you have just been with Allah. Carry that peace with you. Let it shape the first words you speak, the first thought you think, and the first thing you do after you rise from this mat.",
+    movement:"Head turns gently to the right, then to the left",
+    posture:"taslim"
+  }
+];
+
+// ─── SVG POSTURE ILLUSTRATIONS ───
+function postureSVG(type, color, accent) {
+  const c = accent;
+  const svgs = {
+    "standing-still": `
+      <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="60" cy="60" r="50" fill="none" stroke="${c}" stroke-width="0.5" opacity="0.15"/>
+        <circle cx="60" cy="60" r="35" fill="none" stroke="${c}" stroke-width="0.5" opacity="0.1"/>
+        <circle cx="60" cy="28" r="7" fill="${c}" opacity="0.7"/>
+        <line x1="60" y1="35" x2="60" y2="68" stroke="${c}" stroke-width="2.5" opacity="0.7"/>
+        <line x1="60" y1="68" x2="48" y2="92" stroke="${c}" stroke-width="2.5" opacity="0.7"/>
+        <line x1="60" y1="68" x2="72" y2="92" stroke="${c}" stroke-width="2.5" opacity="0.7"/>
+        <line x1="60" y1="48" x2="46" y2="58" stroke="${c}" stroke-width="2.5" opacity="0.7"/>
+        <line x1="60" y1="48" x2="74" y2="58" stroke="${c}" stroke-width="2.5" opacity="0.7"/>
+        <circle cx="60" cy="52" r="6" fill="${c}" opacity="0.08">
+          <animate attributeName="r" values="6;10;6" dur="3s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0.08;0.15;0.08" dur="3s" repeatCount="indefinite"/>
+        </circle>
+      </svg>`,
+    "hands-raised": `
+      <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="60" cy="36" r="7" fill="${c}" opacity="0.7"/>
+        <line x1="60" y1="43" x2="60" y2="73" stroke="${c}" stroke-width="2.5" opacity="0.7"/>
+        <line x1="60" y1="73" x2="48" y2="95" stroke="${c}" stroke-width="2.5" opacity="0.7"/>
+        <line x1="60" y1="73" x2="72" y2="95" stroke="${c}" stroke-width="2.5" opacity="0.7"/>
+        <line x1="60" y1="52" x2="38" y2="26" stroke="${c}" stroke-width="2.5" opacity="0.7"/>
+        <line x1="60" y1="52" x2="82" y2="26" stroke="${c}" stroke-width="2.5" opacity="0.7"/>
+        <circle cx="36" cy="22" r="3.5" fill="${c}" opacity="0.5"/>
+        <circle cx="84" cy="22" r="3.5" fill="${c}" opacity="0.5"/>
+        <line x1="30" y1="16" x2="26" y2="12" stroke="${c}" stroke-width="1" opacity="0.25"/>
+        <line x1="33" y1="13" x2="30" y2="8" stroke="${c}" stroke-width="1" opacity="0.2"/>
+        <line x1="90" y1="16" x2="94" y2="12" stroke="${c}" stroke-width="1" opacity="0.25"/>
+        <line x1="87" y1="13" x2="90" y2="8" stroke="${c}" stroke-width="1" opacity="0.2"/>
+      </svg>`,
+    "standing-folded": `
+      <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="60" cy="26" r="7" fill="${c}" opacity="0.7"/>
+        <line x1="60" y1="33" x2="60" y2="68" stroke="${c}" stroke-width="2.5" opacity="0.7"/>
+        <line x1="60" y1="68" x2="48" y2="92" stroke="${c}" stroke-width="2.5" opacity="0.7"/>
+        <line x1="60" y1="68" x2="72" y2="92" stroke="${c}" stroke-width="2.5" opacity="0.7"/>
+        <line x1="60" y1="48" x2="50" y2="53" stroke="${c}" stroke-width="2.5" opacity="0.7"/>
+        <line x1="60" y1="48" x2="70" y2="53" stroke="${c}" stroke-width="2.5" opacity="0.7"/>
+        <line x1="50" y1="53" x2="60" y2="51" stroke="${c}" stroke-width="2" opacity="0.5"/>
+        <line x1="70" y1="53" x2="60" y2="51" stroke="${c}" stroke-width="2" opacity="0.5"/>
+        <path d="M 40 12 Q 60 6 80 12" fill="none" stroke="${c}" stroke-width="0.6" opacity="0.15">
+          <animate attributeName="d" values="M 40 12 Q 60 6 80 12;M 40 12 Q 60 18 80 12;M 40 12 Q 60 6 80 12" dur="4s" repeatCount="indefinite"/>
+        </path>
+        <path d="M 38 18 Q 60 12 82 18" fill="none" stroke="${c}" stroke-width="0.6" opacity="0.1">
+          <animate attributeName="d" values="M 38 18 Q 60 12 82 18;M 38 18 Q 60 24 82 18;M 38 18 Q 60 12 82 18" dur="4.5s" repeatCount="indefinite"/>
+        </path>
+      </svg>`,
+    "bowing": `
+      <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="32" cy="40" r="7" fill="${c}" opacity="0.7"/>
+        <line x1="38" y1="43" x2="68" y2="46" stroke="${c}" stroke-width="2.5" opacity="0.7"/>
+        <line x1="68" y1="46" x2="58" y2="80" stroke="${c}" stroke-width="2.5" opacity="0.7"/>
+        <line x1="68" y1="46" x2="78" y2="80" stroke="${c}" stroke-width="2.5" opacity="0.7"/>
+        <line x1="48" y1="44" x2="56" y2="62" stroke="${c}" stroke-width="2" opacity="0.6"/>
+        <line x1="53" y1="45" x2="62" y2="62" stroke="${c}" stroke-width="2" opacity="0.6"/>
+        <line x1="22" y1="88" x2="92" y2="88" stroke="${c}" stroke-width="0.6" opacity="0.15"/>
+      </svg>`,
+    "prostrating": `
+      <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="30" cy="56" r="6" fill="${c}" opacity="0.7"/>
+        <line x1="35" y1="58" x2="52" y2="48" stroke="${c}" stroke-width="2.5" opacity="0.7"/>
+        <line x1="52" y1="48" x2="72" y2="48" stroke="${c}" stroke-width="2.5" opacity="0.7"/>
+        <line x1="72" y1="48" x2="66" y2="72" stroke="${c}" stroke-width="2.5" opacity="0.7"/>
+        <line x1="72" y1="48" x2="82" y2="72" stroke="${c}" stroke-width="2.5" opacity="0.7"/>
+        <line x1="36" y1="55" x2="22" y2="62" stroke="${c}" stroke-width="2" opacity="0.6"/>
+        <line x1="34" y1="57" x2="18" y2="62" stroke="${c}" stroke-width="2" opacity="0.6"/>
+        <circle cx="28" cy="62" r="3" fill="${c}" opacity="0.2">
+          <animate attributeName="opacity" values="0.2;0.45;0.2" dur="2.5s" repeatCount="indefinite"/>
+          <animate attributeName="r" values="3;5;3" dur="2.5s" repeatCount="indefinite"/>
+        </circle>
+        <line x1="12" y1="72" x2="95" y2="72" stroke="${c}" stroke-width="0.6" opacity="0.15"/>
+        <text x="60" y="90" text-anchor="middle" font-size="7" fill="${c}" opacity="0.3" font-style="italic" font-family="Cormorant Garamond,serif">closest to Allah</text>
+      </svg>`,
+    "sitting": `
+      <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="55" cy="28" r="7" fill="${c}" opacity="0.7"/>
+        <line x1="55" y1="35" x2="55" y2="60" stroke="${c}" stroke-width="2.5" opacity="0.7"/>
+        <line x1="55" y1="60" x2="42" y2="78" stroke="${c}" stroke-width="2.5" opacity="0.6"/>
+        <line x1="42" y1="78" x2="35" y2="78" stroke="${c}" stroke-width="2.5" opacity="0.6"/>
+        <line x1="55" y1="60" x2="68" y2="72" stroke="${c}" stroke-width="2.5" opacity="0.6"/>
+        <line x1="68" y1="72" x2="76" y2="72" stroke="${c}" stroke-width="2.5" opacity="0.6"/>
+        <line x1="55" y1="46" x2="44" y2="60" stroke="${c}" stroke-width="2" opacity="0.6"/>
+        <line x1="55" y1="46" x2="66" y2="60" stroke="${c}" stroke-width="2" opacity="0.6"/>
+        <line x1="22" y1="82" x2="92" y2="82" stroke="${c}" stroke-width="0.6" opacity="0.15"/>
+      </svg>`,
+    "sitting-finger": `
+      <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="55" cy="30" r="7" fill="${c}" opacity="0.7"/>
+        <line x1="55" y1="37" x2="55" y2="62" stroke="${c}" stroke-width="2.5" opacity="0.7"/>
+        <line x1="55" y1="62" x2="42" y2="80" stroke="${c}" stroke-width="2.5" opacity="0.6"/>
+        <line x1="42" y1="80" x2="35" y2="80" stroke="${c}" stroke-width="2.5" opacity="0.6"/>
+        <line x1="55" y1="62" x2="68" y2="74" stroke="${c}" stroke-width="2.5" opacity="0.6"/>
+        <line x1="68" y1="74" x2="76" y2="74" stroke="${c}" stroke-width="2.5" opacity="0.6"/>
+        <line x1="55" y1="48" x2="44" y2="62" stroke="${c}" stroke-width="2" opacity="0.6"/>
+        <line x1="55" y1="48" x2="68" y2="54" stroke="${c}" stroke-width="2" opacity="0.7"/>
+        <line x1="68" y1="54" x2="68" y2="38" stroke="${c}" stroke-width="2" opacity="0.8"/>
+        <circle cx="68" cy="36" r="2.5" fill="${c}" opacity="0.4">
+          <animate attributeName="opacity" values="0.4;0.8;0.4" dur="1.5s" repeatCount="indefinite"/>
+        </circle>
+        <line x1="22" y1="84" x2="92" y2="84" stroke="${c}" stroke-width="0.6" opacity="0.15"/>
+      </svg>`,
+    "taslim": `
+      <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="60" cy="30" r="7" fill="${c}" opacity="0.7"/>
+        <line x1="60" y1="37" x2="60" y2="67" stroke="${c}" stroke-width="2.5" opacity="0.7"/>
+        <line x1="60" y1="67" x2="48" y2="90" stroke="${c}" stroke-width="2.5" opacity="0.7"/>
+        <line x1="60" y1="67" x2="72" y2="90" stroke="${c}" stroke-width="2.5" opacity="0.7"/>
+        <line x1="60" y1="50" x2="46" y2="58" stroke="${c}" stroke-width="2.5" opacity="0.7"/>
+        <line x1="60" y1="50" x2="74" y2="58" stroke="${c}" stroke-width="2.5" opacity="0.7"/>
+        <path d="M 30 28 A 30 30 0 0 1 90 28" fill="none" stroke="${c}" stroke-width="0.7" opacity="0.15">
+          <animate attributeName="opacity" values="0.15;0.3;0.15" dur="3s" repeatCount="indefinite"/>
+        </path>
+        <path d="M 25 28 A 35 35 0 0 1 95 28" fill="none" stroke="${c}" stroke-width="0.5" opacity="0.08">
+          <animate attributeName="opacity" values="0.08;0.2;0.08" dur="4s" repeatCount="indefinite"/>
+        </path>
+        <polygon points="82,26 78,24 78,28" fill="${c}" opacity="0.35"/>
+        <polygon points="38,26 42,24 42,28" fill="${c}" opacity="0.35"/>
+        <line x1="74" y1="26" x2="82" y2="26" stroke="${c}" stroke-width="1" opacity="0.35"/>
+        <line x1="46" y1="26" x2="38" y2="26" stroke="${c}" stroke-width="1" opacity="0.35"/>
+      </svg>`
+  };
+  return svgs[type] || svgs["standing-still"];
+}
+
+// ─── RENDER STAGES ───
+const main = document.getElementById("stages");
+stages.forEach((s, i) => {
+  const isEven = i % 2 === 1;
+  const section = document.createElement("section");
+  section.className = "stage";
+  section.id = `section-${i}`;
+
+  const arabicBlock = s.arabic ? `
+    <div class="arabic-block" style="border-color:${s.accent}15">
+      <div class="arabic-text">${s.arabic.replace(/\n/g,"<br>")}</div>
+      <div class="arabic-divider" style="background:${s.accent}"></div>
+      <div class="translit" style="color:${s.accent}">${s.translit.replace(/\n/g,"<br>")}</div>
+      <div class="translation">${s.translation.replace(/\n/g,"<br>")}</div>
+    </div>
+  ` : '';
+
+  section.innerHTML = `
+    <div class="stage-inner" style="${isEven ? 'direction:rtl' : ''}">
+      <div class="stage-visual reveal" style="${isEven ? 'direction:ltr' : ''}">
+        <div class="posture-circle" style="background:radial-gradient(circle at 40% 40%,${s.color}20,transparent 70%)">
+          ${postureSVG(s.posture, s.color, s.accent)}
+        </div>
+        <div class="movement-label">${s.movement}</div>
+      </div>
+      <div style="${isEven ? 'direction:ltr' : ''}">
+        <div class="stage-num reveal" style="color:${s.accent}">${s.num} / 12</div>
+        <h2 class="stage-title reveal reveal-delay-1">${s.name}</h2>
+        <p class="stage-subtitle reveal reveal-delay-1" style="color:${s.accent}">${s.subtitle}</p>
+        ${arabicBlock ? `<div class="reveal reveal-delay-2">${arabicBlock}</div>` : ''}
+        <div class="reveal reveal-delay-3">
+          <div class="section-label" style="color:#D4AF37">DEEPER MEANING</div>
+          <p class="meaning">${s.meaning}</p>
+        </div>
+        <div class="reflection-block reveal reveal-delay-4" style="border-color:${s.accent}50">
+          <div class="section-label" style="color:${s.accent}">SPIRITUAL REFLECTION</div>
+          <p class="reflection" style="color:${s.accent}">"${s.reflection}"</p>
+        </div>
+      </div>
+    </div>
+  `;
+  main.appendChild(section);
+});
+
+// ─── NAV DOTS ───
+const navDots = document.getElementById("navDots");
+// Hero dot
+const heroDot = document.createElement("button");
+heroDot.className = "nav-dot active";
+heroDot.title = "Top";
+heroDot.onclick = () => document.getElementById("section-hero").scrollIntoView({behavior:"smooth"});
+navDots.appendChild(heroDot);
+// Stage dots
+stages.forEach((s, i) => {
+  const dot = document.createElement("button");
+  dot.className = "nav-dot";
+  dot.title = s.name;
+  dot.onclick = () => document.getElementById(`section-${i}`).scrollIntoView({behavior:"smooth"});
+  navDots.appendChild(dot);
+});
+// Closing dot
+const closeDot = document.createElement("button");
+closeDot.className = "nav-dot";
+closeDot.title = "The Spiritual Flow";
+closeDot.onclick = () => document.getElementById("section-closing").scrollIntoView({behavior:"smooth"});
+navDots.appendChild(closeDot);
+
+// ─── SCROLL OBSERVER (reveal + nav dot highlight) ───
+const allSections = [
+  document.getElementById("section-hero"),
+  ...stages.map((_,i) => document.getElementById(`section-${i}`)),
+  document.getElementById("section-closing")
+];
+const dots = navDots.querySelectorAll(".nav-dot");
+
+const sectionObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const idx = allSections.indexOf(e.target);
+      dots.forEach((d, j) => d.classList.toggle("active", j === idx));
+    }
+  });
+}, { threshold: 0.35 });
+allSections.forEach(s => sectionObs.observe(s));
+
+// Reveal observer
+const revealObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add("visible"); }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll(".reveal").forEach(el => revealObs.observe(el));
+</script>
+</body>
+</html>
