@@ -222,6 +222,33 @@ body::after{
   color:var(--gold);opacity:0.4;margin-top:16px;
 }
 
+/* ─── TABS ─── */
+.tab-bar{
+  display:flex;gap:0;margin-bottom:24px;
+  border-bottom:1px solid rgba(255,255,255,0.08);
+}
+.tab-btn{
+  flex:1;padding:10px 8px;background:none;border:none;
+  font-family:'Cormorant Garamond',serif;font-size:13px;
+  letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--text-faint);cursor:pointer;
+  border-bottom:2px solid transparent;
+  transition:all 0.3s ease;
+}
+.tab-btn:hover{color:var(--text-dim)}
+.tab-btn.active{color:#fff;border-bottom-color:var(--accent, var(--gold))}
+.tab-panel{
+  display:none;
+  animation:tabFade 0.35s ease;
+}
+.tab-panel.active{display:block}
+@keyframes tabFade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+.no-arabic-note{
+  font-size:15px;font-style:italic;color:var(--text-dim);
+  text-align:center;padding:32px 16px;line-height:1.8;
+}
+
 /* ─── SCROLL ANIMATIONS ─── */
 .reveal{opacity:0;transform:translateY(30px);transition:all 0.8s cubic-bezier(0.22,1,0.36,1)}
 .reveal.visible{opacity:1;transform:translateY(0)}
@@ -551,14 +578,16 @@ stages.forEach((s, i) => {
   section.className = "stage";
   section.id = `section-${i}`;
 
-  const arabicBlock = s.arabic ? `
+  const stageId = `stage-${i}`;
+
+  const arabicPanel = s.arabic ? `
     <div class="arabic-block" style="border-color:${s.accent}15">
       <div class="arabic-text">${s.arabic.replace(/\n/g,"<br>")}</div>
       <div class="arabic-divider" style="background:${s.accent}"></div>
       <div class="translit" style="color:${s.accent}">${s.translit.replace(/\n/g,"<br>")}</div>
       <div class="translation">${s.translation.replace(/\n/g,"<br>")}</div>
     </div>
-  ` : '';
+  ` : `<div class="no-arabic-note">No spoken words — this is a silent intention of the heart.</div>`;
 
   section.innerHTML = `
     <div class="stage-inner" style="${isEven ? 'direction:rtl' : ''}">
@@ -572,14 +601,25 @@ stages.forEach((s, i) => {
         <div class="stage-num reveal" style="color:${s.accent}">${s.num} / 12</div>
         <h2 class="stage-title reveal reveal-delay-1">${s.name}</h2>
         <p class="stage-subtitle reveal reveal-delay-1" style="color:${s.accent}">${s.subtitle}</p>
-        ${arabicBlock ? `<div class="reveal reveal-delay-2">${arabicBlock}</div>` : ''}
-        <div class="reveal reveal-delay-3">
-          <div class="section-label" style="color:#D4AF37">DEEPER MEANING</div>
-          <p class="meaning">${s.meaning}</p>
-        </div>
-        <div class="reflection-block reveal reveal-delay-4" style="border-color:${s.accent}50">
-          <div class="section-label" style="color:${s.accent}">SPIRITUAL REFLECTION</div>
-          <p class="reflection" style="color:${s.accent}">"${s.reflection}"</p>
+        <div class="reveal reveal-delay-2">
+          <div class="tab-bar" data-stage="${stageId}">
+            <button class="tab-btn active" data-tab="${stageId}-arabic" style="--accent:${s.accent}">Arabic</button>
+            <button class="tab-btn" data-tab="${stageId}-meaning" style="--accent:${s.accent}">Meaning</button>
+            <button class="tab-btn" data-tab="${stageId}-reflection" style="--accent:${s.accent}">Reflection</button>
+          </div>
+          <div class="tab-panel active" id="${stageId}-arabic">
+            ${arabicPanel}
+          </div>
+          <div class="tab-panel" id="${stageId}-meaning">
+            <div class="section-label" style="color:#D4AF37">DEEPER MEANING</div>
+            <p class="meaning">${s.meaning}</p>
+          </div>
+          <div class="tab-panel" id="${stageId}-reflection">
+            <div class="reflection-block" style="border-color:${s.accent}50">
+              <div class="section-label" style="color:${s.accent}">SPIRITUAL REFLECTION</div>
+              <p class="reflection" style="color:${s.accent}">"${s.reflection}"</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -635,6 +675,18 @@ const revealObs = new IntersectionObserver(entries => {
   });
 }, { threshold: 0.15 });
 document.querySelectorAll(".reveal").forEach(el => revealObs.observe(el));
+
+// ─── TAB SWITCHING ───
+document.addEventListener("click", e => {
+  const btn = e.target.closest(".tab-btn");
+  if (!btn) return;
+  const bar = btn.parentElement;
+  const wrapper = bar.parentElement;
+  bar.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  wrapper.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+  document.getElementById(btn.dataset.tab).classList.add("active");
+});
 </script>
 </body>
 </html>
